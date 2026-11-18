@@ -1,0 +1,453 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#C0392B" />
+  <meta name="description" content="Monstar Burgers — Sistem kasir dan manajemen pesanan" />
+  <title>Monstar Burgers</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="css/style.css?v=1795016078" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       HALAMAN LOGIN
+  ════════════════════════════════════════════════════════════ -->
+  <section data-page="login" class="page page--login" aria-label="Halaman Login">
+    <div class="login-wrap">
+
+      <!-- Brand -->
+      <div class="login-brand">
+        <div class="login-logo">🍔</div>
+        <h1 class="login-title">Monstar Burgers</h1>
+        <p class="login-subtitle">Selamat datang!</p>
+      </div>
+
+      <!-- ── KARTU UTAMA: Tab Masuk / Daftar (untuk pelanggan) ── -->
+      <div class="login-card card">
+
+        <!-- Tab switcher -->
+        <div class="login-mode-tabs">
+          <button class="login-mode-tab login-mode-tab--active" data-mode="login" id="tabLoginBtn">
+            Masuk
+          </button>
+          <button class="login-mode-tab" data-mode="register" id="tabRegisterBtn">
+            Daftar Akun
+          </button>
+        </div>
+
+        <!-- Form Masuk Pelanggan -->
+        <div id="custLoginForm">
+          <div class="login-customer-form" style="margin-top:16px;">
+            <div class="form-group">
+              <label for="loginCustHp" class="form-label">Nomor HP</label>
+              <input type="tel" id="loginCustHp" class="form-input"
+                inputmode="numeric" placeholder="Contoh: 081234567890"
+                maxlength="15" autocomplete="tel" />
+            </div>
+            <div class="form-group mt-3">
+              <label for="loginCustPin" class="form-label">PIN</label>
+              <input type="password" id="loginCustPin" class="form-input form-input--pin"
+                inputmode="numeric" maxlength="6" placeholder="••••"
+                autocomplete="current-password" />
+            </div>
+            <p class="form-error" id="loginCustError" role="alert" aria-live="polite" hidden></p>
+            <button type="button" class="btn btn--primary btn--full mt-3" id="loginCustSubmitBtn">
+              Masuk
+            </button>
+          </div>
+        </div>
+
+        <!-- Form Daftar Akun Customer -->
+        <div id="custRegisterForm" hidden>
+          <div class="login-customer-form" style="margin-top:16px;">
+            <div class="form-group">
+              <label for="regNama" class="form-label">Nama Lengkap</label>
+              <input type="text" id="regNama" class="form-input"
+                placeholder="Contoh: Budi Santoso" maxlength="60" autocomplete="name" />
+            </div>
+            <div class="form-group mt-3">
+              <label for="regHp" class="form-label">Nomor HP</label>
+              <input type="tel" id="regHp" class="form-input"
+                inputmode="numeric" placeholder="Contoh: 081234567890"
+                maxlength="15" autocomplete="tel" />
+            </div>
+            <div class="form-group mt-3">
+              <label for="regPin" class="form-label">Buat PIN <span class="form-hint">(4–6 digit angka)</span></label>
+              <input type="password" id="regPin" class="form-input form-input--pin"
+                inputmode="numeric" maxlength="6" placeholder="••••"
+                autocomplete="new-password" />
+            </div>
+            <div class="form-group mt-3">
+              <label for="regPinConfirm" class="form-label">Ulangi PIN</label>
+              <input type="password" id="regPinConfirm" class="form-input form-input--pin"
+                inputmode="numeric" maxlength="6" placeholder="••••"
+                autocomplete="new-password" />
+            </div>
+            <p class="form-error" id="registerError" role="alert" aria-live="polite" hidden></p>
+            <button type="button" class="btn btn--primary btn--full mt-3" id="registerSubmitBtn">
+              Buat Akun
+            </button>
+          </div>
+        </div>
+
+      </div><!-- /login-card -->
+
+      <!-- ── Pemisah ── -->
+      <div class="login-divider">
+        <span>atau</span>
+      </div>
+
+      <!-- ── Masuk sebagai Pemilik / Staf ── -->
+      <div class="login-card card" id="ownerLoginCard">
+        <button type="button" class="login-owner-toggle" id="ownerToggleBtn">
+          <span>🔑 Masuk sebagai Pemilik / Staf</span>
+          <span id="ownerChevron">▼</span>
+        </button>
+
+        <!-- Panel owner (tersembunyi by default, expand saat klik) -->
+        <div id="ownerPanel" hidden>
+          <!-- Pilih user owner -->
+          <div id="loginUserBtns" style="display:flex;flex-direction:column;gap:10px;padding:0 16px 16px;"></div>
+
+          <!-- PIN input setelah pilih user owner -->
+          <div class="login-pin-wrap" id="loginPinSection" hidden style="padding:0 16px 16px;">
+            <label for="loginPinInput" class="form-label">PIN untuk <span id="loginSelectedName"></span></label>
+            <input type="password" id="loginPinInput" class="form-input form-input--pin"
+              inputmode="numeric" maxlength="6" autocomplete="current-password"
+              placeholder="••••" aria-describedby="loginPinError" />
+            <p class="form-error" id="loginPinError" role="alert" aria-live="polite" hidden></p>
+            <button type="button" class="btn btn--primary btn--full mt-3" id="loginSubmitBtn">
+              Masuk
+            </button>
+            <button type="button" class="btn btn--ghost btn--full mt-2" id="loginBackBtn">
+              ← Ganti Pengguna
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <p class="login-footer">Data tersimpan di perangkat ini</p>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       WRAPPER APP (muncul setelah login)
+  ════════════════════════════════════════════════════════════ -->
+  <div id="appShell" hidden>
+
+    <!-- Header -->
+    <header class="app-header" role="banner">
+      <div class="app-header__left">
+        <span class="app-header__logo" aria-hidden="true">🍔</span>
+        <span class="app-header__brand">Monstar Burgers</span>
+      </div>
+      <div class="app-header__right">
+        <span class="app-header__user" id="headerUsername" aria-label="Pengguna aktif"></span>
+        <button type="button" class="btn btn--ghost btn--sm" id="logoutBtn" aria-label="Keluar">
+          Keluar
+        </button>
+      </div>
+    </header>
+
+    <!-- Sidebar (desktop) — owner only, disembunyikan untuk customer via JS -->
+    <nav class="sidebar" id="sidebarNav" aria-label="Navigasi utama">
+      <ul class="sidebar__nav">
+        <li class="nav-owner-only"><button class="sidebar__item" data-nav="kasir" aria-current="false">
+          <span class="nav-icon" aria-hidden="true">🧾</span>
+          <span class="nav-label">Pesan</span>
+        </button></li>
+        <li class="nav-owner-only"><button class="sidebar__item" data-nav="antrean" aria-current="false">
+          <span class="nav-icon" aria-hidden="true">📋</span>
+          <span class="nav-label">Antrean</span>
+        </button></li>
+        <li class="nav-owner-only"><button class="sidebar__item" data-nav="pembayaran" aria-current="false">
+          <span class="nav-icon" aria-hidden="true">💳</span>
+          <span class="nav-label">Bayar</span>
+        </button></li>
+        <li class="nav-owner-only"><button class="sidebar__item" data-nav="laporan" aria-current="false">
+          <span class="nav-icon" aria-hidden="true">📊</span>
+          <span class="nav-label">Laporan</span>
+        </button></li>
+        <li class="nav-owner-only"><button class="sidebar__item" data-nav="menu" aria-current="false">
+          <span class="nav-icon" aria-hidden="true">🍔</span>
+          <span class="nav-label">Menu</span>
+        </button></li>
+        <!-- Customer only -->
+        <li class="nav-customer-only" hidden><button class="sidebar__item" data-nav="customer-pesan" aria-current="false">
+          <span class="nav-icon" aria-hidden="true">🧾</span>
+          <span class="nav-label">Pesan</span>
+        </button></li>
+        <li class="nav-customer-only" hidden><button class="sidebar__item" data-nav="customer-status" aria-current="false">
+          <span class="nav-icon" aria-hidden="true">📋</span>
+          <span class="nav-label">Pesanan Saya</span>
+        </button></li>
+      </ul>
+    </nav>
+
+    <!-- Main content area -->
+    <main class="app-main" id="appMain" role="main">
+
+      <!-- ─── HALAMAN KASIR (owner) ──────────────────────────── -->
+      <section data-page="kasir" class="page" aria-label="Input Pesanan">
+        <div class="kasir-layout">
+          <div class="kasir-menu" id="kasirMenuPanel">
+            <div class="kasir-menu__header">
+              <h2 class="page-title">Menu</h2>
+              <div class="category-chips" id="categoryChips" role="group" aria-label="Filter kategori">
+                <button class="chip chip--active" data-cat="Semua">Semua</button>
+                <button class="chip" data-cat="Burger & Sandwich">🍔 Burger</button>
+                <button class="chip" data-cat="Kentang Goreng">🍟 Kentang</button>
+              </div>
+            </div>
+            <div class="menu-grid" id="menuGrid" role="list" aria-label="Daftar menu"></div>
+          </div>
+
+          <div class="kasir-cart" id="kasirCartPanel">
+            <div class="kasir-cart__header">
+              <h2 class="page-title">Keranjang</h2>
+              <span class="cart-count badge badge--primary" id="cartBadge" aria-live="polite" hidden>0</span>
+            </div>
+            <div class="cart-items" id="cartItems" aria-live="polite" aria-label="Item keranjang">
+              <div class="empty-state" id="cartEmpty">
+                <span class="empty-state__icon" aria-hidden="true">🛒</span>
+                <p>Keranjang kosong.<br>Pilih menu di sebelah.</p>
+              </div>
+            </div>
+            <div class="cart-total" id="cartTotal" hidden>
+              <span>Total</span>
+              <span class="cart-total__amount" id="cartTotalAmount">Rp0</span>
+            </div>
+            <form class="order-form" id="orderForm" novalidate>
+              <fieldset class="form-fieldset">
+                <legend class="form-legend">Saluran Pesanan</legend>
+                <div class="radio-group">
+                  <label class="radio-label">
+                    <input type="radio" name="saluran" value="Langsung" required />
+                    <span>Langsung</span>
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" name="saluran" value="WhatsApp" />
+                    <span>📱 WhatsApp</span>
+                  </label>
+                </div>
+              </fieldset>
+              <div class="form-group">
+                <label for="namaPelanggan" class="form-label">Nama Pelanggan <span class="form-hint">(opsional)</span></label>
+                <input type="text" id="namaPelanggan" name="namaPelanggan"
+                  class="form-input" maxlength="50" placeholder="Contoh: Budi" autocomplete="off" />
+              </div>
+              <div class="form-group">
+                <label for="catatanPesanan" class="form-label">Catatan <span class="form-hint">(opsional)</span></label>
+                <textarea id="catatanPesanan" name="catatan" class="form-input form-input--textarea"
+                  maxlength="200" rows="2" placeholder="Contoh: tanpa bawang, extra pedas"></textarea>
+              </div>
+              <fieldset class="form-fieldset">
+                <legend class="form-legend">Metode Pembayaran</legend>
+                <div class="radio-group">
+                  <label class="radio-label">
+                    <input type="radio" name="metodeBayar" value="Tunai" required />
+                    <span>💵 Tunai</span>
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" name="metodeBayar" value="QRIS" />
+                    <span>📲 QRIS</span>
+                  </label>
+                </div>
+              </fieldset>
+              <p class="form-error" id="orderFormError" role="alert" aria-live="polite" hidden></p>
+              <button type="submit" class="btn btn--primary btn--full btn--lg mt-3" id="createOrderBtn">
+                🧾 Buat Pesanan
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── HALAMAN ANTREAN (owner) ───────────────────────── -->
+      <section data-page="antrean" class="page" aria-label="Papan Antrean">
+        <div class="page-header">
+          <h2 class="page-title">Papan Antrean</h2>
+          <span class="queue-count" id="queueCount" aria-live="polite"></span>
+        </div>
+        <div class="queue-board" id="queueBoard" aria-live="polite" aria-label="Daftar pesanan aktif"></div>
+      </section>
+
+      <!-- ─── HALAMAN PEMBAYARAN (owner) ────────────────────── -->
+      <section data-page="pembayaran" class="page" aria-label="Manajemen Pembayaran">
+        <div class="page-header">
+          <h2 class="page-title">Pembayaran</h2>
+        </div>
+        <div class="payment-tabs" role="tablist" aria-label="Tab pembayaran">
+          <button class="tab tab--active" role="tab" aria-selected="true" data-tab="unpaid" id="tab-unpaid">
+            Belum Lunas
+            <span class="tab-badge" id="unpaidCount" aria-live="polite"></span>
+          </button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="all" id="tab-all">
+            Semua
+          </button>
+        </div>
+        <div class="payment-list" id="paymentList" aria-live="polite"></div>
+      </section>
+
+      <!-- ─── HALAMAN LAPORAN (owner) ───────────────────────── -->
+      <section data-page="laporan" class="page" aria-label="Laporan dan Riwayat">
+        <div class="page-header">
+          <h2 class="page-title">Laporan & Riwayat</h2>
+          <div class="filter-group" role="group" aria-label="Filter waktu">
+            <button class="chip chip--active" data-filter="today" id="filterToday">Hari Ini</button>
+            <button class="chip" data-filter="all" id="filterAll">Semua</button>
+          </div>
+        </div>
+        <div class="report-summary" id="reportSummary"></div>
+        <div class="report-table-wrap">
+          <table class="report-table" id="reportTable" aria-label="Riwayat transaksi">
+            <thead>
+              <tr>
+                <th scope="col">No. Pesanan</th>
+                <th scope="col">Waktu</th>
+                <th scope="col">Pelanggan</th>
+                <th scope="col">Total</th>
+                <th scope="col">Metode</th>
+                <th scope="col">Pengerjaan</th>
+                <th scope="col">Pembayaran</th>
+              </tr>
+            </thead>
+            <tbody id="reportTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ─── HALAMAN MENU (owner) ──────────────────────────── -->
+      <section data-page="menu" class="page" aria-label="Kelola Menu">
+        <div class="page-header">
+          <h2 class="page-title">Kelola Menu</h2>
+          <button type="button" class="btn btn--primary btn--sm" id="addMenuBtn">+ Tambah Menu</button>
+        </div>
+        <div class="menu-manage-list" id="menuManageList" aria-label="Daftar item menu"></div>
+      </section>
+
+      <!-- ─── HALAMAN PESAN (customer) ──────────────────────── -->
+      <section data-page="customer-pesan" class="page" aria-label="Pesan Menu">
+        <div class="kasir-layout">
+          <!-- Panel Menu Customer -->
+          <div class="kasir-menu" id="custMenuPanel">
+            <div class="kasir-menu__header">
+              <h2 class="page-title">Menu</h2>
+              <div class="category-chips" id="custCategoryChips" role="group" aria-label="Filter kategori">
+                <button class="chip chip--active" data-custcat="Semua">Semua</button>
+                <button class="chip" data-custcat="Burger & Sandwich">🍔 Burger</button>
+                <button class="chip" data-custcat="Kentang Goreng">🍟 Kentang</button>
+              </div>
+            </div>
+            <div class="menu-grid" id="custMenuGrid" role="list" aria-label="Daftar menu"></div>
+          </div>
+
+          <!-- Panel Keranjang Customer -->
+          <div class="kasir-cart" id="custCartPanel">
+            <div class="kasir-cart__header">
+              <h2 class="page-title">Keranjang</h2>
+              <span class="cart-count badge badge--primary" id="custCartBadge" aria-live="polite" hidden>0</span>
+            </div>
+            <div class="cart-items" id="custCartItems" aria-live="polite" aria-label="Item keranjang">
+              <div class="empty-state">
+                <span class="empty-state__icon" aria-hidden="true">🛒</span>
+                <p>Keranjang kosong.<br>Pilih menu di sebelah.</p>
+              </div>
+            </div>
+            <div class="cart-total" id="custCartTotal" hidden>
+              <span>Total</span>
+              <span class="cart-total__amount" id="custCartTotalAmount">Rp0</span>
+            </div>
+            <form class="order-form" id="custOrderForm" novalidate>
+              <div class="form-group">
+                <label for="custCatatan" class="form-label">Catatan <span class="form-hint">(opsional)</span></label>
+                <textarea id="custCatatan" class="form-input form-input--textarea"
+                  maxlength="200" rows="2" placeholder="Contoh: tanpa bawang, extra pedas"></textarea>
+              </div>
+              <!-- Info QRIS -->
+              <div class="cust-payment-info">
+                <span>📲</span>
+                <div>
+                  <div style="font-weight:700;">Pembayaran QRIS</div>
+                  <div style="font-size:13px;color:var(--color-text-muted);">Konfirmasi oleh kasir setelah transfer</div>
+                </div>
+              </div>
+              <p class="form-error" id="custOrderError" role="alert" aria-live="polite" hidden></p>
+              <button type="submit" class="btn btn--primary btn--full btn--lg mt-3" id="custCreateOrderBtn">
+                🧾 Pesan Sekarang
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── HALAMAN STATUS PESANAN (customer) ─────────────── -->
+      <section data-page="customer-status" class="page" aria-label="Status Pesanan Saya">
+        <div class="page-header">
+          <h2 class="page-title">Pesanan Saya</h2>
+          <button type="button" class="btn btn--ghost btn--sm" id="refreshStatusBtn"
+            aria-label="Refresh status">🔄 Refresh</button>
+        </div>
+        <div id="custOrderCards" aria-live="polite" style="padding:0 16px 32px;display:flex;flex-direction:column;gap:16px;">
+          <!-- Render via JS -->
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Tab Bar (mobile) — konten dikontrol JS berdasarkan peran -->
+    <nav class="bottom-nav" id="bottomNav" aria-label="Navigasi bawah">
+      <!-- Owner tabs -->
+      <button class="bottom-nav__item nav-owner-only" data-nav="kasir" aria-current="false">
+        <span class="nav-icon" aria-hidden="true">🧾</span>
+        <span class="nav-label">Pesan</span>
+      </button>
+      <button class="bottom-nav__item nav-owner-only" data-nav="antrean" aria-current="false">
+        <span class="nav-icon" aria-hidden="true">📋</span>
+        <span class="nav-label">Antrean</span>
+      </button>
+      <button class="bottom-nav__item nav-owner-only" data-nav="pembayaran" aria-current="false">
+        <span class="nav-icon" aria-hidden="true">💳</span>
+        <span class="nav-label">Bayar</span>
+      </button>
+      <button class="bottom-nav__item nav-owner-only" data-nav="laporan" aria-current="false">
+        <span class="nav-icon" aria-hidden="true">📊</span>
+        <span class="nav-label">Laporan</span>
+      </button>
+      <button class="bottom-nav__item nav-owner-only" data-nav="menu" aria-current="false">
+        <span class="nav-icon" aria-hidden="true">🍔</span>
+        <span class="nav-label">Menu</span>
+      </button>
+      <!-- Customer tabs (hidden by default, shown via JS) -->
+      <button class="bottom-nav__item nav-customer-only" data-nav="customer-pesan" aria-current="false" hidden>
+        <span class="nav-icon" aria-hidden="true">🧾</span>
+        <span class="nav-label">Pesan</span>
+      </button>
+      <button class="bottom-nav__item nav-customer-only" data-nav="customer-status" aria-current="false" hidden>
+        <span class="nav-icon" aria-hidden="true">📋</span>
+        <span class="nav-label">Pesanan Saya</span>
+      </button>
+    </nav>
+
+  </div><!-- /appShell -->
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
+    <div class="modal" id="modalBox">
+      <div class="modal__header">
+        <h3 class="modal__title" id="modalTitle"></h3>
+        <button type="button" class="modal__close" id="modalClose" aria-label="Tutup modal">✕</button>
+      </div>
+      <div class="modal__body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+  <script type="module" src="js/app.js?v=1795016078"></script>
+</body>
+</html>

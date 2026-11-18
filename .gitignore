@@ -1,0 +1,9 @@
+# Kiro internal
+.kiro/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/

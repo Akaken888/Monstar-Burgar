@@ -1,0 +1,26 @@
+{
+  "name": "Monstar Burgers Order Manager",
+  "short_name": "MB Order",
+  "description": "Sistem kasir dan manajemen pesanan Monstar Burgers",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#FDF6EC",
+  "theme_color": "#C0392B",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["food", "business", "productivity"],
+  "lang": "id"
+}
